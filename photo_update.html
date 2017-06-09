@@ -75,7 +75,7 @@
 							console.log(data);
 							var user = data.user;
 							if (user.photo_url != null) {
-								var html = '<img src="' + user.photo_url + '" width=200 height=200>';
+								var html = '<img src="' + g_config.api_url + user.photo_url + '" width=200 height=200>';
 								$("#photo").html(html);
 							}
 							else {
