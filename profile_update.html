@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>WIP后台管理</title>
+
+		<!-- Bootstrap -->
+		<link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+			<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#my-navbar" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+				<a class="navbar-brand" href="list.html">WIP后台管理</a>
+			</div>
+			</div>
+		</nav>
+
+		<div class="container" style="padding-top:100px;">
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-horizontal" id="update_user_form">
+						<div class="form-group">
+							<label class="col-md-3 control-label">个人界面网址后缀</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="alias" id="alias">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">中文姓名</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="cn_name" id="cn_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">英文姓名</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="en_name" id="en_name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">身份</label>
+							<div class="col-md-9">
+								<select class="form-control" name="group" id="group">
+									<option value="teacher">老师</option>
+									<option value="doctor">博士</option>
+									<option value="master">硕士</option>
+									<option value="intern">实习生</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">加入年份</label>
+							<div class="col-md-9">
+								<select class="form-control" name="year" id="year">
+									<option value="2010">2010</option>
+									<option value="2011">2011</option>
+									<option value="2012">2012</option>
+									<option value="2013">2013</option>
+									<option value="2014">2014</option>
+									<option value="2015">2015</option>
+									<option value="2016">2016</option>
+									<option value="2017">2017</option>
+									<option value="2018">2018</option>
+									<option value="2019">2019</option>
+									<option value="2020">2020</option>
+									<option value="2021">2021</option>
+									<option value="2022">2022</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">中文介绍</label>
+							<div class="col-md-9">
+								<textarea class="form-control" rows="6" name="cn_intro" id="cn_intro"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">英文介绍</label>
+							<div class="col-md-9">
+								<textarea class="form-control" rows="6" name="en_intro" id="en_intro"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+    						<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn btn-success">更新</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="dist/js/jquery-3.2.1.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="dist/js/bootstrap.min.js"></script>
+		<script src="dist/js/jquery.form.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var id    = localStorage.getItem("id");
+				var token = localStorage.getItem("token");
+				console.log(id);
+				console.log(token);
+				if (id != null && token != null) {
+					$.ajax({
+						type: "GET",
+						url: g_config.api_url + "/api/user/id/" + id,
+						dataType: 'json',
+						success: function (data) {
+						
+							console.log(data);
+
+							var user = data.user;
+
+							if (user.alias != null) {
+								$('#alias').attr("value", user.alias);
+							}
+
+							if (user.cn_name != null) {
+								$('#cn_name').attr("value", user.cn_name);
+							}
+
+							if (user.en_name != null) {
+								$('#en_name').attr("value", user.en_name);
+							}
+							
+							if (user.group != null) {
+								$('#group').find("option[value='" + user.group + "']").attr("selected", true);
+							}
+
+							if (user.year != null) {
+								$('#year').find("option[value='" + user.year + "']").attr("selected", true);
+							}
+
+							if (user.cn_intro != null) {
+								$('#cn_intro').val(user.cn_intro);
+							}
+
+							if (user.en_intro != null) {
+								$('#en_intro').val(user.en_intro);
+							}
+
+						}
+					});
+
+					var options = {
+						url: g_config.api_url + "/api/user/id/" + id,
+						type: 'PUT',
+						beforeSend: function (xhr) {
+							xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));
+						},
+						success: function(data) {
+							console.log(data);
+							if (data.status == 'ok') {
+								alert("更新成功");
+								window.location = "list.html";
+							}
+							else {
+								alert(data.message);
+							}
+						}
+					};
+
+					$('#update_user_form').submit(function() {
+						// submit the form
+						$(this).ajaxSubmit(options);
+						// return false to prevent normal browser submit and page navigation 
+						return false;
+					});
+
+				}
+				else {
+					alert("没有权限，请重新登录");
+					window.location = "login.html";
+				}
+			});
+		</script>
+	</body>
+</html>	

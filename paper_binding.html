@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>WIP后台管理</title>
+
+		<!-- Bootstrap -->
+		<link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+			<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#my-navbar" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</button>
+				<a class="navbar-brand" href="list.html">WIP后台管理</a>
+			</div>
+			</div>
+		</nav>
+
+		<div class="container" style="padding-top:100px;">
+			<div class="row">
+				<div class="col-md-12" style="margin-bottom: 50px;">
+					<form class="form-horizontal" id="search_form">
+						<div class="form-group">
+							<label class="col-md-3 control-label">关键词</label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="keyword" id="keyword">
+							</div>
+							<div class="col-md-3">
+								<button type="submit" class="btn btn-success">搜索</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-12" id="paperList" hidden>
+					<table class="table">
+						<tr>
+							<th>论文标题</th>
+							<th>论文作者</th>
+							<th>会议名称/期刊名称</th>
+							<th>发表年份</th>
+							<th>操作</th>
+						</tr>
+						<tr data-template>
+							<td>{{title}}</td>
+							<td>{{authors}}</td>
+							<td>{{publisher}}</td>
+							<td>{{year}}</td>
+							<td>
+							{% if is_own %}
+								<button class="btn btn-danger toggle_rm" value="{{id}}">解除绑定</button>
+							{% else %}
+								<button class="btn btn-success toggle_add" value="{{id}}">添加绑定</button>
+							{% endif %}
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="dist/js/jquery-3.2.1.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="dist/js/bootstrap.min.js"></script>
+		<script src="dist/js/jquery.form.js"></script>
+		<script src="dist/js/tempo.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var id    = localStorage.getItem("id");
+				var token = localStorage.getItem("token");
+				if (id != null && token != null) {
+
+					var tempo_obj = Tempo.prepare("paperList");
+
+					var options = {
+						url: g_config.api_url + "/api/paper/keyword",
+						type: 'POST',
+						beforeSend: function (xhr) {
+							xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));
+						},
+						success: function(data) {
+							console.log(data);
+
+							tempo_obj.clear();
+							tempo_obj.render(data.paperList);
+							$("#paperList").show();
+
+							$("button.toggle_add").click(function(){
+								var paper_id = $(this).val();
+								$.ajax({
+									type: "POST",
+									url: g_config.api_url + "/api/own",
+									data: "paper_id=" + paper_id,
+									beforeSend: function (xhr) {
+										xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));
+									},
+									success: function (data) {
+										alert(data.message);
+										$("#search_form").ajaxSubmit(options);
+									}
+								});
+							});
+
+							$("button.toggle_rm").click(function(){
+								var paper_id = $(this).val();
+								$.ajax({
+									type: "DELETE",
+									url: g_config.api_url + "/api/own",
+									data: "paper_id=" + paper_id,
+									beforeSend: function (xhr) {
+										xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));
+									},
+									success: function (data) {
+										alert(data.message);
+										$("#search_form").ajaxSubmit(options);
+									}
+								});
+							});
+						}
+					};
+
+					$("#search_form").submit(function() {
+						// submit the form
+						$(this).ajaxSubmit(options);
+						// return false to prevent normal browser submit and page navigation 
+						return false;
+					});
+
+					// 初次进入界面时，加载所有论文
+					$("#search_form").ajaxSubmit(options);
+				}
+				else {
+					alert("没有权限，请重新登录");
+					window.location = "login.html";
+				}
+			});
+		</script>
+	</body>
+</html>	
