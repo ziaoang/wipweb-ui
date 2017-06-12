@@ -114,6 +114,15 @@
 									success: function (data) {
 										alert(data.message);
 										$("#search_form").ajaxSubmit(options);
+									},
+									error: function(jqXHR, textStatus, errorThrown) {
+										console.log(jqXHR);
+										console.log(textStatus);
+										console.log(errorThrown);
+										if (jqXHR.status == 401) {
+											alert("没有权限，请重新登录");
+											window.location = "index.html";
+										}
 									}
 								});
 							});
@@ -130,9 +139,27 @@
 									success: function (data) {
 										alert(data.message);
 										$("#search_form").ajaxSubmit(options);
+									},
+									error: function(jqXHR, textStatus, errorThrown) {
+										console.log(jqXHR);
+										console.log(textStatus);
+										console.log(errorThrown);
+										if (jqXHR.status == 401) {
+											alert("没有权限，请重新登录");
+											window.location = "index.html";
+										}
 									}
 								});
 							});
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							console.log(jqXHR);
+							console.log(textStatus);
+							console.log(errorThrown);
+							if (jqXHR.status == 401) {
+								alert("没有权限，请重新登录");
+								window.location = "index.html";
+							}
 						}
 					};
 

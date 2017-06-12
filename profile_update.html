@@ -86,6 +86,27 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-md-3 control-label">是否毕业</label>
+							<div class="col-md-9">
+								<select class="form-control" name="is_graduate" id="is_graduate">
+									<option value="0">否</option>
+									<option value="1">是</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">中文简介</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="cn_abstract" id="cn_abstract">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">英文简介</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="en_abstract" id="en_abstract">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-md-3 control-label">中文介绍</label>
 							<div class="col-md-9">
 								<textarea class="form-control" rows="6" name="cn_intro" id="cn_intro"></textarea>
@@ -150,6 +171,18 @@
 								$('#year').find("option[value='" + user.year + "']").attr("selected", true);
 							}
 
+							if (user.is_graduate != null) {
+								$('#is_graduate').find("option[value='" + user.is_graduate + "']").attr("selected", true);
+							}
+
+							if (user.cn_abstract != null) {
+								$('#cn_abstract').val(user.cn_abstract);
+							}
+
+							if (user.en_abstract != null) {
+								$('#en_abstract').val(user.en_abstract);
+							}
+							
 							if (user.cn_intro != null) {
 								$('#cn_intro').val(user.cn_intro);
 							}
@@ -175,6 +208,15 @@
 							}
 							else {
 								alert(data.message);
+							}
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							console.log(jqXHR);
+							console.log(textStatus);
+							console.log(errorThrown);
+							if (jqXHR.status == 401) {
+								alert("没有权限，请重新登录");
+								window.location = "index.html";
 							}
 						}
 					};
