@@ -69,7 +69,7 @@
 				if (id != null && token != null) {
 					$.ajax({
 						type: "GET",
-						url: g_config.api_url + "/api/user/id/" + id,
+						url: g_config.api_url + "api/user/id/" + id,
 						dataType: 'json',
 						success: function (data) {
 							console.log(data);
@@ -85,7 +85,7 @@
 					});
 
 					var options = {
-						url: g_config.api_url + "/api/user/id/" + id,
+						url: g_config.api_url + "api/user/id/" + id,
 						type: 'PUT',
 						beforeSend: function (xhr) {
 							xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));

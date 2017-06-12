@@ -119,7 +119,7 @@
 				if (id != null && token != null) {
 
 					var options = {
-						url: g_config.api_url + "/api/paper",
+						url: g_config.api_url + "api/paper",
 						type: 'POST',
 						beforeSend: function (xhr) {
 							xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));

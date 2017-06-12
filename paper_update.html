@@ -132,7 +132,7 @@
 				if (id != null && token != null && paper_id != null) {
 					$.ajax({
 						type: "GET",
-						url: g_config.api_url + "/api/paper/id/" + paper_id,
+						url: g_config.api_url + "api/paper/id/" + paper_id,
 						success: function (data) {
 						
 							console.log(data);
@@ -167,7 +167,7 @@
 					});
 
 					var options = {
-						url: g_config.api_url + "/api/paper/id/" + paper_id,
+						url: g_config.api_url + "api/paper/id/" + paper_id,
 						type: 'PUT',
 						beforeSend: function (xhr) {
 							xhr.setRequestHeader ("Authorization", "Basic " + btoa(id + ":" + token));
