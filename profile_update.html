@@ -55,6 +55,18 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-md-3 control-label">邮箱</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="email" id="email">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">个人主页</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="homepage" id="homepage">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-md-3 control-label">身份</label>
 							<div class="col-md-9">
 								<select class="form-control" name="group" id="group">
@@ -161,6 +173,14 @@
 
 							if (user.en_name != null) {
 								$('#en_name').attr("value", user.en_name);
+							}
+
+							if (user.email != null) {
+								$('#email').attr("value", user.email);
+							}
+
+							if (user.homepage != null) {
+								$('#homepage').attr("value", user.homepage);
 							}
 							
 							if (user.group != null) {
